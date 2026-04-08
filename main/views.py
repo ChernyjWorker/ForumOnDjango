@@ -11,3 +11,15 @@ def post_list(request):
     }
     
     return render(request, template, context)
+
+
+def post_detail(request, post_slug):
+    template = 'main/post_detail.html'
+    
+    post = Post.objects.get(slug=post_slug)
+    
+    context = {
+        'post' : post
+    }
+    
+    return render(request, template, context)
