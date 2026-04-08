@@ -8,7 +8,6 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ('title', 'content')
     search_fields = ('title', 'content', 'created_at')
     
-    exclude = ('slug',)
     
     prepopulated_fields = {
         'slug' : ('title',)
