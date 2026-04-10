@@ -30,7 +30,10 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title, allow_unicode=True)
+            self.slug= original_slug = slugify(self.title, allow_unicode=True)
+        counter = 1
+        if Post.objects.filter(slug=self.slug).exists():
+            self.slug = f'{original_slug}-{counter}'
         super(Post, self).save(*args, **kwargs)
 
     class Meta:
