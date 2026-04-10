@@ -7,6 +7,8 @@ from django.utils.text import slugify
 
 from .forms import CreatePostForm
 from .models import Post
+
+
 # Create your views here.
 
 def post_list(request):
@@ -35,6 +37,7 @@ class CreatePost(CreateView):
     template_name = 'main/post_create.html'
     form_class = CreatePostForm
     success_url = '/'
+    
     
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

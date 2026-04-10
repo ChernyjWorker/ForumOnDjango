@@ -25,8 +25,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name = 'Дата последнего обновления')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категория')
     
+    
     def __str__(self):
         return self.title
+    
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -35,6 +37,7 @@ class Post(models.Model):
         if Post.objects.filter(slug=self.slug).exists():
             self.slug = f'{original_slug}-{counter}'
         super(Post, self).save(*args, **kwargs)
+
 
     class Meta:
         verbose_name_plural = 'Посты'

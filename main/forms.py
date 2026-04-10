@@ -9,6 +9,7 @@ class CreatePostForm(forms.ModelForm):
     slug = forms.SlugField(required=False, widget=forms.HiddenInput())
     content = forms.Textarea()
     
+    
     def save(self, commit=True):
         instance = super().save(commit=False)
         
@@ -17,6 +18,8 @@ class CreatePostForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+    
     class Meta:
         model = Post
         
