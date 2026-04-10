@@ -3,6 +3,7 @@ from typing import Any
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
+from django.views.generic.detail import DetailView
 
 
 from .decorators import navbar_preload
@@ -27,16 +28,19 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         return context
 
-def post_detail(request, post_slug):
-    template = 'main/post_detail.html'
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "main/post_detail.html"
+    slug_field = 'slug'
+    slug_url_kwarg = 'post_slug'
     
-    post = Post.objects.get(slug=post_slug)
+    @navbar_preload
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        return context
     
-    context = {
-        'post' : post
-    }
-    
-    return render(request, template, context)
+
 
 
 class CreatePost(CreateView):

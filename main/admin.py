@@ -6,7 +6,7 @@ class PostAdmin(admin.ModelAdmin):
     
     list_display = ('created_at','title','content','category','updated_at')
     list_display_links = ('title','content')
-    search_fields = ('title','content','created_at')
+    search_fields = ('title', 'content', 'created_at')
     
     
     prepopulated_fields = {
