@@ -5,13 +5,14 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import DetailView
 
-
-from .decorators import navbar_preload
-
-from django.utils.text import slugify
+from django.shortcuts import get_object_or_404 
 
 from .forms import CreatePostForm
-from .models import Post
+from .models import Category, Post
+from .decorators import navbar_preload
+
+
+from django.utils.text import slugify
 
 
 # Create your views here.
@@ -22,6 +23,21 @@ class PostListView(ListView):
     
     def get_queryset(self):
         return Post.objects.all()
+    
+    @navbar_preload
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class PostFilterListView(ListView):
+    model = Post
+    template_name = "main/post_list.html"
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+        return Post.objects.filter(category = category)
     
     @navbar_preload
     def get_context_data(self, **kwargs):
