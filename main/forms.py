@@ -1,13 +1,16 @@
 from django import forms
 from django.utils.text import slugify
 
-from .models import Post
+from .models import Category, Post
 
 class CreatePostForm(forms.ModelForm):
     
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), 
+                                        required=True, label = 'Категория поста')
     title = forms.CharField(label='Заголовок поста', required=True)
     slug = forms.SlugField(required=False, widget=forms.HiddenInput())
     content = forms.Textarea()
+    
     
     
     def save(self, commit=True):
@@ -23,4 +26,4 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         
-        fields = ('title', 'slug', 'content')
+        fields = ('category','title', 'slug', 'content')
