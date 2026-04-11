@@ -11,9 +11,6 @@ from .models import Category, Post
 from .decorators import navbar_preload
 
 
-from django.utils.text import slugify
-
-
 # Create your views here.
 class PostListView(ListView):
     model = Post
