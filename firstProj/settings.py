@@ -75,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'firstProj.wsgi.application'
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # Database
