@@ -1,0 +1,9 @@
+asgiref==3.11.1
+Django==6.0.3
+django-autoslug==1.9.9
+dotenv==0.9.9
+pillow==12.2.0
+python-dotenv==1.2.2
+six==1.17.0
+sqlparse==0.5.5
+transliterate==1.10.2
