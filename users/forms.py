@@ -22,11 +22,20 @@ class CustomUserCreationForm(UserCreationForm):
             'password2':forms.PasswordInput(attrs={'class':'form_control','placeholder':'Повторите пароль'})
         }
         
+        
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
             raise ValidationError('Данный email зарегестрирован.')
         return email
+    
+    
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username = username).exists():
+            raise ValidationError('Такой пользователь уже существует.')
+        return username
+    
     
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
@@ -35,8 +44,3 @@ class CustomUserCreationForm(UserCreationForm):
             raise ValidationError('Пароли не совпадают.')
         return password2
     
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.filter(username = username).exists():
-            raise ValidationError('Такой пользователь уже существует.')
-        return username
