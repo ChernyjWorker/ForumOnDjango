@@ -44,3 +44,11 @@ class CustomUserCreationForm(UserCreationForm):
             raise ValidationError('Пароли не совпадают.')
         return password2
     
+    
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Введите имя пользователя.'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Введите пароль'}))
+    
+    
+class LogoutForm(forms.Form):
+    pass
