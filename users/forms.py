@@ -1,6 +1,6 @@
 from django import forms 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model
 from django.utils.html import strip_tags
 from django.core.exceptions import ValidationError
 
@@ -25,12 +25,18 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise ValidationError('Данный email зарегестрирован!')
+            raise ValidationError('Данный email зарегестрирован.')
         return email
     
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
         password2 = self.cleaned_data['password2']
         if password1 and password2 and password1 != password2:
-            raise ValidationError('Пароли не совпадают!')
+            raise ValidationError('Пароли не совпадают.')
         return password2
+    
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username = username).exists():
+            raise ValidationError('Такой пользователь уже существует.')
+        return username
