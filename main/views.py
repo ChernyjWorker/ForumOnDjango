@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from .forms import CreatePostForm
 from .models import Category, Post
-from .decorators import navbar_preload
+from decorators import navbar_preload
 
 
 # Create your views here.

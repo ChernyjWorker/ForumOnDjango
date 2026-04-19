@@ -76,7 +76,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'firstProj.wsgi.application'
 
 AUTH_USER_MODEL = 'users.CustomUser'
-
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'post_list'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
