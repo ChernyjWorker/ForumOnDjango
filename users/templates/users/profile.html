@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titile %}{{profile_user.get_username}}{% endblock titile %}
+{% block content %}
+    <div class="profile-block">
+        <img src="{% if avatar %}{{ profile_user.avatar.url }}{% else %}{% static 'images/default.png'%}{% endif %}" alt="avatar" class="profile-avatar">
+        <p class="username">{{ profile_user.get_username }}</p>
+    </div>
+{% endblock content %}
