@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from users.models import CustomUser
 # Create your models here.
 class Category(models.Model):
     
@@ -45,3 +46,17 @@ class Post(models.Model):
         verbose_name = 'Пост'
         ordering = ('title','created_at','updated_at')
 
+class Commentary(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, verbose_name='Автор')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост')
+    content = models.TextField(null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата написания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата редактирования')
+    
+    def __str__(self):
+        return f'User:{str(self.user)} commented {str(self.post)}.'
+    
+    class Meta:
+        verbose_name = 'Коментарий'
+        verbose_name_plural = 'Коментарии'
+        ordering = ('created_at','updated_at')
