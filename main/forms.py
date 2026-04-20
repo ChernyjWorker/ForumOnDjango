@@ -2,7 +2,7 @@ from django import forms
 from django.utils.text import slugify
 from transliterate import translit
 
-from .models import Category, Post
+from .models import Category, Post, Commentary
 
 class CreatePostForm(forms.ModelForm):
     
@@ -30,3 +30,13 @@ class CreatePostForm(forms.ModelForm):
         model = Post
         
         fields = ('category','title', 'slug', 'content')
+        
+        
+class CreateCommentaryForm(forms.ModelForm):
+    content = forms.Textarea(attrs={'class':'form-control', 'placeholder':'Оставьте свой отзыв...', 'rows':'5'})
+    
+    class Meta:
+        model = Commentary
+        fields = ('content',)
+        
+        
