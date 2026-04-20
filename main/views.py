@@ -4,6 +4,8 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import DetailView
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.shortcuts import get_object_or_404 
 
 from .forms import CreatePostForm
@@ -55,7 +57,7 @@ class PostDetailView(DetailView):
 
 
 
-class CreatePost(CreateView):
+class CreatePost(LoginRequiredMixin, CreateView):
     template_name = 'main/post_create.html'
     form_class = CreatePostForm
     success_url = '/'
