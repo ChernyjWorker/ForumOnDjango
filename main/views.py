@@ -1,15 +1,17 @@
 from typing import Any
 
+from django.contrib import messages
+
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormMixin
 from django.views.generic.detail import DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import get_object_or_404 
 
-from .forms import CreatePostForm
-from .models import Category, Post
+from .forms import CreatePostForm, CreateCommentaryForm
+from .models import Category, Post, Commentary
 from decorators import navbar_preload
 
 
@@ -43,15 +45,45 @@ class PostFilterListView(ListView):
         return context
 
 
-class PostDetailView(DetailView):
+class PostDetailView(FormMixin, DetailView):
     model = Post
     template_name = "main/post_detail.html"
     slug_field = 'slug'
     slug_url_kwarg = 'post_slug'
+    form_class = CreateCommentaryForm
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+    
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        
+        comment.post = self.object
+        comment.user = self.request.user
+        
+        comment.save()
+        
+        messages.success(self.request, 'Коментарий успешно добавлен!')
+        return super().form_valid(form)
+    
+
+    def get_success_url(self) -> str:
+        return self.object.get_absolute_url()
+    
+            
     
     @navbar_preload
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        context['comment_form'] = self.get_form()
+        context['commentaries'] = Commentary.objects.filter(post = self.object)
         return context
     
 

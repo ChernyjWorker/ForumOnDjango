@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from users.models import CustomUser
+from django.urls import reverse
 # Create your models here.
 class Category(models.Model):
     
@@ -29,6 +30,11 @@ class Post(models.Model):
     
     def __str__(self):
         return self.title
+    
+    
+    def get_absolute_url(self):
+        return reverse("post_detail", kwargs={"post_slug": self.slug})
+    
     
     
     def save(self, *args, **kwargs):
