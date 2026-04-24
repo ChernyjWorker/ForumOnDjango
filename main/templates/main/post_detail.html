@@ -11,6 +11,13 @@
     <p>{{ post.content }}</p>
     <p>{{ post.created_at }}</p>
 
+    {% if user == post.author %}
+        <form action="{% url 'post_delete' post.id%}" method="post">
+            {% csrf_token %}
+            <button type="submit">Удалить</button>
+        </form>
+    {% endif %}
+
     {% if user.is_authenticated %}
         <form method="post">
             {% csrf_token %}
@@ -26,6 +33,12 @@
                 <h4>{{ commentary.user.username }}</h4>
                 <p>{{ commentary.content }}</p>
                 <p>{{ commentary.created_at }}</p>
+                {% if user == commentary.user %}
+                    <form action="{% url 'comment_delete' commentary.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Удалить комментарий</button>
+                    </form>
+                {% endif %}
             </article>
         {% endfor %}
     </div>

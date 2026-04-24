@@ -3,10 +3,12 @@ from typing import Any
 from django.contrib import messages
 
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, FormMixin
+from django.views.generic.edit import CreateView, FormMixin, DeleteView
 from django.views.generic.detail import DetailView
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy, reverse
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from django.shortcuts import get_object_or_404 
 
@@ -87,8 +89,6 @@ class PostDetailView(FormMixin, DetailView):
         return context
     
 
-
-
 class CreatePost(LoginRequiredMixin, CreateView):
     template_name = 'main/post_create.html'
     form_class = CreatePostForm
@@ -100,3 +100,32 @@ class CreatePost(LoginRequiredMixin, CreateView):
         context["posts"] = Post.objects.all()
         return context
     
+    def get_form_kwargs(self) -> dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs['author'] = self.request.user
+        return kwargs
+
+
+class PostDeleteViews(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('post_list')
+    template_name = 'main/post_delete.html'
+    
+    
+    def test_func(self) -> bool | None:
+        post = self.get_object()
+        return self.request.user == post.author
+
+
+class CommentDeleteViews(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Commentary
+    template_name = 'main/comment_delete.html'
+    
+    
+    def test_func(self) -> bool | None:
+        comment = self.get_object()
+        return self.request.user == comment.user
+    
+    
+    def get_success_url(self) -> str:
+        return reverse('post_detail', kwargs={'post_slug':self.object.post.slug})

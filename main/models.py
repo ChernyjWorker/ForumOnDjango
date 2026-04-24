@@ -8,8 +8,10 @@ class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя')
     slug = models.SlugField(max_length=100)
     
+    
     def __str__(self):
         return self.name
+    
     
     class Meta:
         
@@ -19,13 +21,13 @@ class Category(models.Model):
         
         
 class Post(models.Model):
-    
     title = models.CharField(max_length=100, verbose_name='Заголовок')
     slug = models.SlugField(max_length=100)
     content = models.TextField(verbose_name='Контент поста')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name = 'Дата последнего обновления')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категория')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Автор')
     
     
     def __str__(self):
@@ -34,7 +36,6 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"post_slug": self.slug})
-    
     
     
     def save(self, *args, **kwargs):
@@ -52,6 +53,7 @@ class Post(models.Model):
         verbose_name = 'Пост'
         ordering = ('title','created_at','updated_at')
 
+
 class Commentary(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, verbose_name='Автор')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост')
@@ -59,8 +61,10 @@ class Commentary(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата написания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата редактирования')
     
+    
     def __str__(self):
         return f'User:{str(self.user)} commented {str(self.post)}.'
+    
     
     class Meta:
         verbose_name = 'Коментарий'

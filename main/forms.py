@@ -13,12 +13,16 @@ class CreatePostForm(forms.ModelForm):
     content = forms.Textarea()
     
     
+    def __init__(self, *args, **kwargs):
+        self.author = kwargs.pop('author')
+        super().__init__(*args, **kwargs)
     
     def save(self, commit=True):
         instance = super().save(commit=False)
         
         translit_title = translit(instance.title, 'ru',reversed=True)
-        
+        if self.author:
+            instance.author = self.author
         if not instance.slug:
             instance.slug = slugify(f'post-{translit_title}')
         if commit:
