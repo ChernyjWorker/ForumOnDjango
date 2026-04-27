@@ -63,3 +63,8 @@ class ProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self) -> bool | None:
         user = self.get_object
         return self.request.user == user
+
+    @navbar_preload
+    def get_context_data(self, **kwargs: reverse_lazy) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        return context
